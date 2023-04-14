@@ -3,9 +3,12 @@ const app = express()
 app.use(express.json());
 const product_router=require("./routes/ProductRout")
 const user_router=require("./routes/UserRout")
-const category_router=require("./routes/CategoryRout") 
+const category_router=require("./routes/CategoryRout")
+let bodyParser = require('body-parser') 
 let cors=require('cors')
 app.use(cors())
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 
