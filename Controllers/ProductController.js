@@ -1,7 +1,6 @@
 const { Product, Category } = require('../models')
 
 
-
 function get_Product(req, res) {
     let product = Product.findAll({
         include: Category
@@ -46,12 +45,12 @@ function get_Product_update(req, res) {
 }
 
 function get_Product_post(req, res) {
-    const { id } = req.params;
+    // const { id } = req.params;
     const { name, description, price, categoriId } = req.body;
    Product.create(
         { name, description, price, categoriId },
         {
-            where: { id },
+            // where: { id },
             include: Category
         })
         .then((prod) => {
@@ -63,7 +62,7 @@ function get_Product_post(req, res) {
 }
 
 function get_Product_delete(req, res) {
-    const { id } = req.params;
+    const { id } = req.body;
     let product = Product.destroy(
         { where: { id } })
         .then((prod) => {
@@ -73,14 +72,6 @@ function get_Product_delete(req, res) {
         })
 
 }
-
-
-
-
-
-
-
-
 
 module.exports = {
     get_Product,

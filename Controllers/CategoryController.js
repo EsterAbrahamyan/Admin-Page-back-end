@@ -18,7 +18,7 @@ function get_Category (req, res) {
     ) 
     .then((category)=>{
      res.json(category)}).catch((err)=>{
-         res.status(500).json({eror:err.message})
+         res.status(500).json({error:err.message})
      })
   }
 
@@ -55,21 +55,37 @@ function get_Category_update(req, res) {
 
 
 
-function get_Category_delete(req,res){
-    const { id } = req.params;
-    Category.destroy(
-            { where: { id } })
-            .then((cat) => {
-                res.json({ status: 'deleted' })
-            }).catch((err) => {
-                res.status(500).json({ eror: err.message })
-            })
+// function get_Category_delete(req,res){
+//     const { id } = req.params;
+//     Category.destroy(
+//             { where: { id } })
+//             .then((cat) => {
+//                 res.json({ status: 'deleted' })
+//             }).catch((err) => {
+//                 res.status(500).json({ eror: err.message })
+//             })
     
-    }
+//     }
+    async function get_Category_delete(req,res){
+        const { id } = req.body;
+        
+        try {
+            const category = await Category.findOne({
+                where: { id },
+                include: Product
+            });
+            
+            if (category.Products.length > 0) {
+                res.status(400).json({ message: 'Cannot delete category that has products' });
+            } else {
+                await Category.destroy({ where: { id } });
+                res.json({ message: 'Category deleted' });
+            }
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+        }
 
-
-
-
-  
+ 
  module.exports={get_Category,get_Category_post,get_Category_id,
     get_Category_delete,get_Category_update}
